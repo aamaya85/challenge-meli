@@ -2,7 +2,10 @@ module.exports = {
   getLocation: (req, res) => {
     const distances = req.body.satellites.map((sat) => sat.distance)
     if (coords = getLocation(distances)){
-      res.status(200).send(coords)
+      res.status(200).send({
+        position: coords,
+        message: "Not yet"
+      })
     } else {
       res.status(404).send('Error in request')
     }
@@ -37,6 +40,6 @@ const getLocation = (distances) => {
 
   if (Number.isNaN(x) || Number.isNaN(y)) return false
 
-  return { x: x.toFixed(2), y: y.toFixed(2) }
+  return { x: parseFloat(x.toFixed(2)), y: parseFloat(y.toFixed(2)) }
 
 }
