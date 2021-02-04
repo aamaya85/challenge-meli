@@ -1,0 +1,26 @@
+{
+  "name": "challenge-meli",
+  "version": "1.0.0",
+  "description": "Challenge para MercadoLibre - Operación ​Fuego de Quasar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aamaya85/challenge-meli.git"
+  },
+  "keywords": [
+    "mlibre",
+    "aamaya",
+    "challenge",
+    "meli",
+    "quasar"
+  ],
+  "author": "Agustín Amaya",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aamaya85/challenge-meli/issues"
+  },
+  "homepage": "https://github.com/aamaya85/challenge-meli#readme"
+}
