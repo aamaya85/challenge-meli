@@ -1,25 +1,29 @@
+'use strict'
+
 const _ = require('underscore')
 
 module.exports = {
+
   getLocation: (req, res) => {
-    const distances = req.body.satellites.map((sat) => sat.distance)
+    
+    const distances = {
+      kenobi: _.filter(req.body.satellites, (sat) => sat.name === "kenobi"),
+      skywalker: _.filter(req.body.satellites, (sat) => sat.name === "skywalker"),
+      sato: _.filter(req.body.satellites, (sat) => sat.name === "sato")
+    }
+    const message = getMessage(_.pluck(req.body.satellites, 'message'));
+    let coords;
+
     if (coords = getLocation(distances)){
       res.status(200).send({
         position: coords,
-        message: "Not yet"
+        message: message
       })
     } else {
-      res.status(404).send('Error in request')
+      res.status(404).send()
     }
   },
-  getMessage: (req, res) => {
-    
-    const message = getMessage(_.pluck(req.body.satellites, 'message'));
-      res.status(200).send({
-        message
-      })
-    
-  }
+
 }
 
 
@@ -53,29 +57,27 @@ const getLocation = (distances) => {
     sato: [40, 3]
   }
 
-  const x1 = satellitesPositions.kenobi[0]
+  const x1 = satellitesPositions.kenobi[0],
         y1 = satellitesPositions.kenobi[1]
 
-  const x2 = satellitesPositions.skywalker[0]
+  const x2 = satellitesPositions.skywalker[0],
         y2 = satellitesPositions.skywalker[1]
 
-  const x3 = satellitesPositions.sato[0]
+  const x3 = satellitesPositions.sato[0],
         y3 = satellitesPositions.sato[1]
 
-  const r1 = distances[0]
-        r2 = distances[1]
-        r3 = distances[2]
+  const r1 = distances.kenobi[0].distance,
+        r2 = distances.skywalker[0].distance,
+        r3 = distances.sato[0].distance
 
-  A = ((-2) * x1 + 2 * x2)
-  B = ((-2) * y1 + 2 * y2)
-  C = (r1 ** 2) - (r2 ** 2) - (x1 ** 2) + (x2 ** 2) - (y1 ** 2) + (y2 ** 2)
-
-  D = ((-2) * x2 + 2 * x3)
-  E = ((-2) * y2 + 2 * y3)
-  F = (r2 ** 2) - (r3 ** 2) - (x2 ** 2) + (x3 ** 2) - (y2 ** 2) + (y3 ** 2)
-
-  x = (C * E - F * B) / (E * A - B * D)
-  y = (C * D - A * F) / (B * D - A * E)
+  const A = ((-2) * x1 + 2 * x2),
+        B = ((-2) * y1 + 2 * y2),
+        C = (r1 ** 2) - (r2 ** 2) - (x1 ** 2) + (x2 ** 2) - (y1 ** 2) + (y2 ** 2),
+        D = ((-2) * x2 + 2 * x3),
+        E = ((-2) * y2 + 2 * y3),
+        F = (r2 ** 2) - (r3 ** 2) - (x2 ** 2) + (x3 ** 2) - (y2 ** 2) + (y3 ** 2),
+        x = (C * E - F * B) / (E * A - B * D),
+        y = (C * D - A * F) / (B * D - A * E)
 
   if (Number.isNaN(x) || Number.isNaN(y)) return false
 
