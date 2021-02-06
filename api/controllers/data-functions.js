@@ -26,7 +26,7 @@ const getMessage = (messages) => {
 
 // Función para calcular la posición de la fuente por trilateración
 const getLocation = (distances) => {
-
+  console.log(distances)
   // Posiciones actuales de los satélites
   const satellitesPositions = { kenobi: [50, 1], skywalker: [0, 2], sato: [40, 3] }
 
@@ -39,9 +39,9 @@ const getLocation = (distances) => {
   const x3 = satellitesPositions.sato[0],
         y3 = satellitesPositions.sato[1]
 
-  const r1 = distances.kenobi[0].distance,
-        r2 = distances.skywalker[0].distance,
-        r3 = distances.sato[0].distance
+  const r1 = distances.kenobi,
+        r2 = distances.skywalker,
+        r3 = distances.sato
 
   const A = ((-2) * x1 + 2 * x2),
         B = ((-2) * y1 + 2 * y2),
