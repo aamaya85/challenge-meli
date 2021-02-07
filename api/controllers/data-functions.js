@@ -1,12 +1,42 @@
 'use strict'
 
 const _ = require('underscore')
+let satellites = []
+
+const getSourceData = () => {
+  if (satellites.length > 2) {
+
+    let distances = {};
+    _.each(satellites, sat => {
+      distances[sat.name] = parseFloat(sat.distance)
+      console.log(Number.isNaN(distances[sat.name]));
+    })
+    
+    const position = getLocation(distances),
+          message = getMessage(_.pluck(satellites, 'message'));
+
+    return { position, message }
+
+  } else {
+
+    return false
+  
+  }
+
+}
+
+const setSatelliteData = (satellite) => {
+
+  satellites = satellites.filter(s => s.name !== satellite.name)
+  satellites.push(satellite)
+  return satellites
+
+}
 
 // Función para recuperar el mensaje recepcionado
 const getMessage = (messages) => {
-
   messages = _.zip(... messages) // Agrupar las distintas palabras de los mensajes en orden de llegada
-  messages = messages.map((message) => _.compact(message)) // Remover palabras vacías
+  messages = messages.map((message) => _.compact(message)) // Remover palabras vacías ("")
   messages = _.flatten(messages); // Unificar palabras en un array único
   
   let decriptedMessage = []
@@ -18,6 +48,7 @@ const getMessage = (messages) => {
     }
   }
 
+  // Convertimos el array a un string, reemplazamos caracteres de separación
   const originalMessage = decriptedMessage.join(" ").replace(",", " ")
 
   return originalMessage
@@ -26,23 +57,30 @@ const getMessage = (messages) => {
 
 // Función para calcular la posición de la fuente por trilateración
 const getLocation = (distances) => {
-  console.log(distances)
-  // Posiciones actuales de los satélites
-  const satellitesPositions = { kenobi: [50, 1], skywalker: [0, 2], sato: [40, 3] }
+  
+  const satellitesCurrentPosition = { 
+    kenobi: { x: 50, y: 1},
+    skywalker: { x: 0, y: 2 },
+    sato: { x: 40, y: 3 }
+  }
 
-  const x1 = satellitesPositions.kenobi[0],
-        y1 = satellitesPositions.kenobi[1]
 
-  const x2 = satellitesPositions.skywalker[0],
-        y2 = satellitesPositions.skywalker[1]
 
-  const x3 = satellitesPositions.sato[0],
-        y3 = satellitesPositions.sato[1]
+  const x1 = satellitesCurrentPosition.kenobi.x,
+        y1 = satellitesCurrentPosition.kenobi.y
+
+  const x2 = satellitesCurrentPosition.skywalker.x,
+        y2 = satellitesCurrentPosition.skywalker.y
+
+  const x3 = satellitesCurrentPosition.sato.x,
+        y3 = satellitesCurrentPosition.sato.y
 
   const r1 = distances.kenobi,
         r2 = distances.skywalker,
         r3 = distances.sato
 
+  console.log(r1, r2, r3)
+  
   const A = ((-2) * x1 + 2 * x2),
         B = ((-2) * y1 + 2 * y2),
         C = (r1 ** 2) - (r2 ** 2) - (x1 ** 2) + (x2 ** 2) - (y1 ** 2) + (y2 ** 2),
@@ -51,15 +89,18 @@ const getLocation = (distances) => {
         F = (r2 ** 2) - (r3 ** 2) - (x2 ** 2) + (x3 ** 2) - (y2 ** 2) + (y3 ** 2),
         x = (C * E - F * B) / (E * A - B * D),
         y = (C * D - A * F) / (B * D - A * E)
-
   if (Number.isNaN(x) || Number.isNaN(y)) return false
 
-  return { x: parseFloat(x.toFixed(2)), y: parseFloat(y.toFixed(2)) }
+  const location = { x: parseFloat(x.toFixed(2)), y: parseFloat(y.toFixed(2)) }
+
+  return location
 
 }
 
 module.exports = {
   getLocation,
-  getMessage
+  getSourceData,
+  getMessage,
+  setSatelliteData
 }
 
