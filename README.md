@@ -8,14 +8,6 @@ API REST de detección de objetos mediante triangulación y reconstrucción de m
 - [NodeJS](https://nodejs.org/)
 - [Express](http://expressjs.com/pt-br/)
 
-### Instalación
-**Desde la terminal:**
-1. Descargar el proyecto:
-`$ git clone https://github.com/aamaya85/challenge-meli.git`
-2. Instalar las dependencias:
-`$ npm install`
-3. Levantar el servidor:
-`$ npm start`
 
 ### Instalación
 **Desde la terminal:**
@@ -26,18 +18,35 @@ API REST de detección de objetos mediante triangulación y reconstrucción de m
 3. Levantar el servidor:
 `$ npm start`
 
-El servidor está escuchando por default en el puerto 8080. Se puede cambiar esta configuración desde el archivo config.js:
+El servidor queda escuchando por default en el puerto 8080. Se puede cambiar esta configuración desde el archivo config.js:
 ```javascript
 module.exports = {
   port: 8080
 }
 ```
 
+
 ### Uso
 Para probar los requests a los distintos end-points se recomienda el uso alguno de estas aplicaciones:
 * Insomnia: https://insomnia.rest/
 * Postman: https://www.postman.com/
+La URL por defecto es localhost:8080. En caso de ingresar una ruta no válida el sistema responde con un estado 404 (URL inválida)
 
+Los sátelites son 3:
+1. Skywalker (skywalker)
+2. Kenobi (kenobi)
+3. Sato (sato)
+
+Sus coordenadas actuales se definen en el archivo `api/controllers/config-satellites.js`:
+```javascript
+module.exports = {
+  currentPosition: {
+    kenobi: { x: -500, y: -200 },
+    skywalker: { x: 100, y: -100 },
+    sato: { x: 500, y: 100 }
+  }
+}
+````
 
 **Endpoints:**
 * POST -> /api/topsecret/
