@@ -96,3 +96,22 @@ module.exports = {
   "message": "Datos registrados correctamente",
 }
 ```
+* **GET -> /api/topsecret_split/**
+  * Devuelve la posición de la fuente y el contenido del mensaje original siempre que se cuente con ls información de los tres satélites.
+  * Respuestas posibles:
+ 
+```javascript
+{
+  "position": {
+    "x": 23.35,
+    "y": 18.30
+  },
+  "message": "este es un mensaje secreto"
+}
+````
+
+```javascript
+{
+  "message": "No se pudo determinar la ubicación o el mensaje."
+}
+````
