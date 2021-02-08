@@ -18,7 +18,7 @@ module.exports = {
       console.log('error: ', e)
       res.status(500).send({ message: 'Error al registrar los datos' })
     }
-    res.status(200).send({ message: 'Datos registrados correctamente', satellites: satellites })
+    res.status(200).send({ message: 'Datos registrados correctamente' })
   },
 
   getLocationSplit: (req, res) => {
