@@ -1,33 +1,6 @@
 'use strict'
 
 const _ = require('underscore')
-let satellites = []
-
-const getSourceData = () => {
-  if (satellites.length > 2) {
-    const distances = {}
-    _.each(satellites, sat => { distances[sat.name] = sat.distance })
-
-    const position = getLocation(distances)
-    const message = getMessage(_.pluck(satellites, 'message'))
-
-    if ((position) && (message)) {
-      return ({ position, message })
-    }
-  } else return false
-}
-
-const setSatelliteData = (satellite) => {
-  satellites = satellites.filter(s => s.name !== satellite.name)
-  try {
-    satellites.push(satellite)
-  } catch (e) {
-    console.log('error: ', e)
-    return false
-  }
-  return satellites
-}
-
 // Función para recuperar el mensaje recepcionado
 const getMessage = (messages) => {
   messages = _.zip(...messages) // Agrupar las distintas palabras de los mensajes en orden de llegada
@@ -88,7 +61,5 @@ const getLocation = (distances) => {
 
 module.exports = {
   getLocation,
-  getSourceData,
-  getMessage,
-  setSatelliteData
+  getMessage
 }

@@ -1,29 +1,46 @@
 const fn = require('./data-functions.js')
 const _ = require('underscore')
+let satellites = []// Creamos una variable para "cachear" los datos recibidos de los satelites
 
 module.exports = {
 
   setSatelliteData: (req, res) => {
-    const satellite = {
-      name: req.params.satellite_name,
-      distance: req.body.distance,
-      message: req.body.message
-    }
+    // Actualizamos nuestro registro de datos de satelites
+    satellites = satellites.filter(s => s.name !== req.params.satellite_name)
 
-    const satellitesData = fn.setSatelliteData(satellite)
-    if (satellitesData) {
-      res.status(200).send({ message: 'Datos registrados correctamente', satellites: satellitesData })
-    } else {
+    try {
+      satellites.push({
+        name: req.params.satellite_name,
+        distance: req.body.distance,
+        message: req.body.message
+      })
+    } catch (e) {
+      console.log('error: ', e)
       res.status(500).send({ message: 'Error al registrar los datos' })
     }
+    res.status(200).send({ message: 'Datos registrados correctamente', satellites: satellites })
   },
 
   getLocationSplit: (req, res) => {
-    const sourceData = fn.getSourceData()
+    let sourceData = null
+
+    // Chequeamos la cantidad de satelites registrados
+    if (satellites.length > 2) {
+      const distances = {}
+      _.each(satellites, sat => { distances[sat.name] = sat.distance })
+      // Obtenemos posición y mensaje
+      const position = fn.getLocation(distances)
+      const message = fn.getMessage(_.pluck(satellites, 'message'))
+
+      if ((position) && (message)) {
+        sourceData = { position, message }
+      }
+    } else sourceData = false
+
     if (sourceData) {
       res.status(200).send(sourceData)
     } else {
-      res.status(404).send({ message: 'No se pudo determinar la ubicación o el mensaje debido a que no hay suficiente información.' })
+      res.status(404).send({ message: 'No se pudo determinar la ubicación o el mensaje.' })
     }
   },
 
@@ -33,9 +50,18 @@ module.exports = {
       res.status(404).send({ message: 'No se pudo determinar la ubicación o el mensaje. (faltan datos)' })
     }
 
-    // Seteo las distancias
+    satellites = []
     const distances = {}
-    _.each(req.body.satellites, sat => { distances[sat.name] = sat.distance })
+
+    // Registro los datos en nuestra variable local a modo de "caché" y seteo las distancias para la función getLocation
+    _.each(req.body.satellites, sat => {
+      satellites.push({
+        name: sat.name,
+        distance: sat.distance,
+        message: sat.message
+      })
+      distances[sat.name] = sat.distance
+    })
 
     // Obtengo la posición y el mensaje
     const position = fn.getLocation(distances)

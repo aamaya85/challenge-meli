@@ -10,7 +10,7 @@ app.use((req, res) => res.status(404).send({ message: 'URL inválida.' }))
 
 app.use((error, req, res, next) => {
   if (error instanceof SyntaxError) {
-    res.status(400).send('Hay un error en el request.')
+    res.status(400).send({ message: 'Hay un error en el request.' })
   }
 })
 
