@@ -27,7 +27,7 @@ module.exports = {
 Hay una DEMO disponible en: https://challenge-meli-aamaya.appspot.com/
 
 ### Uso
-Para probar los requests a los distintos end-points se recomienda el uso alguno de estas aplicaciones:
+Para probar los requests a los distintos end-points se recomiendan estas aplicaciones:
 * Insomnia: https://insomnia.rest/
 * Postman: https://www.postman.com/
 
@@ -97,7 +97,7 @@ module.exports = {
 }
 ```
 * **GET -> /api/topsecret_split/**
-  * Devuelve la posición de la fuente y el contenido del mensaje original siempre que se cuente con ls información de los tres satélites.
+  * Devuelve la posición de la fuente y el contenido del mensaje original siempre que se cuente con la información de los tres satélites.
   * Respuestas posibles:
  
 ```javascript
