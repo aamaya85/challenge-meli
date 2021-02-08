@@ -1,6 +1,7 @@
 'use strict'
 
 const _ = require('underscore')
+const satellitesData = require('./config-satellites')
 // Función para recuperar el mensaje recepcionado
 const getMessage = (messages) => {
   messages = _.zip(...messages) // Agrupar las distintas palabras de los mensajes en orden de llegada
@@ -24,20 +25,14 @@ const getMessage = (messages) => {
 
 // Función para calcular la posición de la fuente por trilateración
 const getLocation = (distances) => {
-  const satellitesCurrentPosition = {
-    kenobi: { x: 50, y: 1 },
-    skywalker: { x: 0, y: 2 },
-    sato: { x: 40, y: 3 }
-  }
+  const x1 = satellitesData.currentPosition.kenobi.x
+  const y1 = satellitesData.currentPosition.kenobi.y
 
-  const x1 = satellitesCurrentPosition.kenobi.x
-  const y1 = satellitesCurrentPosition.kenobi.y
+  const x2 = satellitesData.currentPosition.skywalker.x
+  const y2 = satellitesData.currentPosition.skywalker.y
 
-  const x2 = satellitesCurrentPosition.skywalker.x
-  const y2 = satellitesCurrentPosition.skywalker.y
-
-  const x3 = satellitesCurrentPosition.sato.x
-  const y3 = satellitesCurrentPosition.sato.y
+  const x3 = satellitesData.currentPosition.sato.x
+  const y3 = satellitesData.currentPosition.sato.y
 
   const r1 = distances.kenobi
   const r2 = distances.skywalker
