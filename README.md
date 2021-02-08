@@ -24,12 +24,13 @@ module.exports = {
   port: 8080
 }
 ```
-
+Hay una DEMO disponible en: https://challenge-meli-aamaya.appspot.com/
 
 ### Uso
 Para probar los requests a los distintos end-points se recomienda el uso alguno de estas aplicaciones:
 * Insomnia: https://insomnia.rest/
 * Postman: https://www.postman.com/
+
 La URL por defecto es localhost:8080. En caso de ingresar una ruta no válida el sistema responde con un estado 404 (URL inválida)
 
 Los sátelites son 3:
@@ -47,37 +48,51 @@ module.exports = {
   }
 }
 ````
-
-**Endpoints:**
-* POST -> /api/topsecret/
-  * Recibe la información de los satélites y devuelve la posición y el contenido del mensaje original
+* **POST -> /api/topsecret/**
+  * Recibe la información de los satélites y devuelve la posición de la fuente y el contenido del mensaje original
   * Un ejemplo del payload sería el siguiente:
 ```javascript
 {
-    "satellites": [
-    {
-        "name": "kenobi",
-        "distance": 100,
-        "message": ["", "", "la", "", "", "puse", ""]
-    },
-    {
-        "name": "skywalker",
-        "distance": 115.5,
-        "message": ["", "a", "", "", "le", "", "cuca"]
-    },
-    {
-        "name": "sato",
-        "distance": 142.7,
-        "message": ["", "", "grande", "", "", ""]
-    }]
+  "satellites": [
+  {
+    "name": "kenobi",
+    "distance": 100,
+    "message": ["la", "", "", "en", "", "pocilga"]
+  },
+  {
+    "name": "skywalker",
+    "distance": 115.5,
+    "message": ["", "la", "puerca", "", "", "", "pocilga"]
+  },
+  {
+    "name": "sato",
+    "distance": 142.7,
+    "message": ["", "", "está", "", "la", ""]
+  }]
 }
 ```
-  * La respuesta:
+  * Respuesta:
 ```javascript
-  {
+{
   "position": {
     "x": 2.33,
     "y": -2802.18
   },
   "message": "a la grande le puse cuca"
 }
+````
+* **POST -> /api/topsecret_split/:satellite_name**
+  * Recibe la información de un satélite y la registra. 
+  * Un ejemplo del payload sería el siguiente:
+```javascript
+{
+  "distance": 50,
+  "message": [“”, “este”, “es”, “”, “mensaje”]
+}
+```
+  * Respuesta:
+```javascript  
+{
+  "message": "Datos registrados correctamente",
+}
+```
